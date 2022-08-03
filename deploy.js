@@ -36,7 +36,13 @@ async function main() {
     // we can provide options like
     // gas limit etc
   });
-  console.log(contract);
+  const transactionReceipt = await contract.deployTransaction.wait(1);
+  console.log("Here is the deployment transaction:");
+  console.log(contract.deployTransaction);
+  console.log("Here is the deployment receipt");
+  // we will get the transaction receipt only 
+  // when we wait for a confirmation block to be added.
+  console.log(transactionReceipt);
 }
 
 main().then(() => {
