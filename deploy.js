@@ -1,8 +1,7 @@
 const ethers = require("ethers");
 const fs = require("fs-extra");
 
-async function main() {
-  try {
+const deployContract = async () => {
     // ethers is a library that allows us to connect
     // to the actual blockchain using
     // RPC (Remote Procedure Call) allows access to a server node on the specified
@@ -77,6 +76,33 @@ async function main() {
     // const sentTransaction = await wallet.sendTransaction(tx);
     // const res = await sentTransaction.wait(1);
     // console.log(res);
+    return contract
+}
+
+// Interact with Contract using Ethers
+const useContract = () => {
+
+}
+
+async function main() {
+  try {
+    const contract = await deployContract();
+    // as we know the abis we can invoke contract functions
+    // since we have not assigned any favorite number
+    // it defaults to 0
+
+    // retrieve is a view function it won't consume any gas
+    const favouriteNumber = await contract.retrieve()
+    console.log(favouriteNumber.toString());
+
+    // this changes state if the blockchain
+    // this invocation will consume gas.
+    const txRes = await contract.store("7"); // ethers is smart enough to know if this is a number or a string
+    // it is also a best practice to pass contract functions number argument in string
+    const txReciept = await txRes.wait(1);
+    console.log(txRes, txReciept);
+    const newFavNum = await contract.retrieve();
+    console.log(newFavNum.toString());
   } catch (error) {
     console.error(error);
   }
